@@ -1,3 +1,5 @@
+"use client";
+
 export default function Loading() {
   return (
     <div className="fixed inset-0 bg-white/80 backdrop-blur-sm z-[100] flex flex-col items-center justify-center animate-in fade-in duration-500">
