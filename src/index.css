@@ -1,0 +1,91 @@
+@import url('https://fonts.googleapis.com/css2?family=Circular+Std:wght@400;500;700&family=Caveat:wght@700&display=swap');
+
+:root {
+  --primary-color: #ff385c; /* THIERRY BNB brand red */
+  --primary-hover: #d90b34;
+  --bg-main: #ffffff;
+  --bg-alt: #f7f7f7;
+  --text-main: #222222;
+  --text-muted: #717171;
+  --border-color: #dddddd;
+  
+  --font-main: -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+  
+  --header-height: 80px;
+  --container-width: 1440px;
+  --border-radius: 12px;
+  --border-radius-lg: 24px;
+  --border-radius-pill: 50px;
+  
+  --transition: all 0.2s ease;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 6px 16px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0 10px 24px rgba(0, 0, 0, 0.18);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-main);
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.43;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--text-main);
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+  transition: var(--transition);
+}
+
+button {
+  font-family: var(--font-main);
+  cursor: pointer;
+  border: none;
+  background: none;
+  transition: var(--transition);
+  outline: none;
+}
+
+.container {
+  max-width: var(--container-width);
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+@media (max-width: 744px) {
+  .container {
+    padding: 0 24px;
+  }
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #999;
+}
+

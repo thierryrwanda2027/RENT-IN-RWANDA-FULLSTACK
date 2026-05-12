@@ -1,0 +1,142 @@
+.airbnb-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: #fff;
+  border-bottom: 1px solid #ebebeb;
+  height: 80px;
+  display: flex;
+  align-items: center;
+}
+
+.header-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.header-logo {
+  flex: 1 0 140px;
+}
+
+.thierry-logo {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #ff385c;
+  font-size: 20px;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.thierry-text {
+  font-size: 24px;
+}
+
+/* Search Pill */
+.header-search-pill {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ddd;
+  border-radius: 40px;
+  padding: 8px 8px 8px 24px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.05);
+  transition: box-shadow 0.2s ease;
+  cursor: pointer;
+  background: #fff;
+  min-width: 300px;
+  justify-content: space-between;
+}
+
+.header-search-pill:hover {
+  box-shadow: 0 2px 4px rgba(0,0,0,0.18);
+}
+
+.search-pill-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #222;
+}
+
+.search-pill-divider {
+  width: 1px;
+  height: 24px;
+  background: #ddd;
+}
+
+.search-pill-muted {
+  color: #717171;
+  font-weight: 400;
+}
+
+.search-icon-circle {
+  width: 32px;
+  height: 32px;
+  background: #ff385c;
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Right Actions */
+.header-actions {
+  flex: 1 0 140px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.host-link {
+  font-size: 14px;
+  font-weight: 500;
+  padding: 12px;
+  border-radius: 24px;
+  color: #222;
+  text-decoration: none;
+}
+
+.host-link:hover {
+  background: #f7f7f7;
+}
+
+.host-link.active {
+  color: #ff385c;
+  background: #fff1f3;
+}
+
+.globe-btn {
+  background: transparent;
+  border: none;
+  padding: 12px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.globe-btn:hover {
+  background: #f7f7f7;
+}
+
+.profile-menu {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid #ddd;
+  border-radius: 24px;
+  padding: 5px 5px 5px 12px;
+  cursor: pointer;
+  transition: box-shadow 0.2s ease;
+}
+
+.profile-menu:hover {
+  box-shadow: 0 2px 4px rgba(0,0,0,0.18);
+}

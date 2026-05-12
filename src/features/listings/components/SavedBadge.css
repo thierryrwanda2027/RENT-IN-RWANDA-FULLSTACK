@@ -1,0 +1,72 @@
+.modern-saved-badge {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 16px;
+  border-radius: 50px;
+  transition: var(--transition);
+}
+
+.modern-saved-badge--dark {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.modern-saved-badge--dark:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.modern-saved-badge--dark .badge-icon,
+.modern-saved-badge--dark .badge-text {
+  color: #ffffff;
+}
+
+.modern-saved-badge--light {
+  background: var(--bg-alt);
+  border: 1px solid var(--border-color);
+}
+
+.modern-saved-badge--light:hover {
+  background: var(--border-color);
+}
+
+.modern-saved-badge--light .badge-icon,
+.modern-saved-badge--light .badge-text {
+  color: var(--text-main);
+}
+
+.badge-icon-wrapper {
+  position: relative;
+  display: flex;
+}
+
+.badge-icon {
+  font-size: 20px;
+}
+
+.badge-count {
+  position: absolute;
+  top: -8px;
+  right: -10px;
+  background: var(--primary-color);
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 700;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #ffffff;
+}
+
+.badge-text {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+@media (max-width: 768px) {
+  .badge-text {
+    display: none;
+  }
+}

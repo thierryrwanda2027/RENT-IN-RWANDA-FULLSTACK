@@ -1,0 +1,7 @@
+.bookings-list { padding: 20px; }
+.booking-item { border-bottom: 1px solid #eee; padding: 20px 0; display: flex; gap: 20px; }
+.booking-item img { width: 120px; height: 120px; object-fit: cover; border-radius: 8px; }
+.booking-item .details h4 { margin-bottom: 10px; }
+.booking-item .status { padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; }
+.status.confirmed { background: #e6fcf5; color: #0ca678; }
+.status.pending { background: #fff4e6; color: #f08c00; }
