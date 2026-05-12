@@ -1,8 +1,0 @@
-node_modules
-.env
-.env.local
-.next
-*.db
-*.db-journal
-/lib/generated/prisma
-.DS_Store

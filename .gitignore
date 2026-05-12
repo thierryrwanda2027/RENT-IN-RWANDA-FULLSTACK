@@ -1,32 +1,12 @@
-# Logs
-logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
-
 node_modules
-dist
-dist-ssr
-*.local
-
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
+.env
+.env.local
+.next
+*.db
+*.db-journal
+/lib/generated/prisma
 .DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-
-# Next.js & Prisma
-airbnb-next/.env
-airbnb-next/.env.local
-airbnb-next/.next
-airbnb-next/*.db
-airbnb-next/*.db-journal
-/airbnb-next/lib/generated/prisma
+dist
+legacy-vite
+airbnb-app
+build_log.txt
