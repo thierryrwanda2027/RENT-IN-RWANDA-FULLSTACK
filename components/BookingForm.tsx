@@ -14,23 +14,11 @@ export default function BookingForm({ listingId }: BookingFormProps) {
   const router = useRouter();
 
   const handleSubmit = async (formData: FormData) => {
-    setIsPending(true);
-    setError(null);
-    
-    try {
-      const result = await createBooking(formData);
-      
-      if (result.success) {
-        router.push("/dashboard");
-        router.refresh();
-      } else {
-        setError(result.error || "Failed to create booking. Please try again.");
-      }
-    } catch (err: any) {
-      setError(err.message || "An unexpected error occurred.");
-    } finally {
-      setIsPending(false);
-    }
+    const checkIn = formData.get("checkIn");
+    const checkOut = formData.get("checkOut");
+    const guests = formData.get("guests");
+
+    router.push(`/listings/${listingId}/book?checkIn=${checkIn}&checkOut=${checkOut}&guests=${guests} guest`);
   };
 
   return (
