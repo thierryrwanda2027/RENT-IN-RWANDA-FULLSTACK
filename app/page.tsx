@@ -4,6 +4,8 @@ import Link from "next/link";
 import FavoriteButton from "@/components/FavoriteButton";
 import { FaHome, FaCampground, FaCity, FaUmbrellaBeach, FaTree } from "react-icons/fa";
 
+export const dynamic = 'force-dynamic';
+
 export default async function HomePage() {
   const listings = await getListings();
 

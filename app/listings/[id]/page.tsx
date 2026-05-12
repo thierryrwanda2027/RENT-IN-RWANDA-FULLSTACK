@@ -8,12 +8,7 @@ interface Props {
   params: Promise<{ id: string }>;
 }
 
-export async function generateStaticParams() {
-  const listings = await getListings();
-  return listings.map((l) => ({
-    id: l.id.toString(),
-  }));
-}
+export const dynamic = 'force-dynamic';
 
 export default async function ListingDetailPage({ params }: Props) {
   const { id } = await params;
