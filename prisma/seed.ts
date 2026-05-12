@@ -155,7 +155,6 @@ async function main() {
 
   // Create Listings
   const listingsToCreate = Array.from({ length: 50 }, (_, i) => {
-    const isBase = i < 6;
     const baseIndex = i % baseListings.length;
     const base = baseListings[baseIndex];
     
@@ -167,20 +166,14 @@ async function main() {
       superhost: base.superhost,
       available: i !== 2, // Make one unavailable
       availableFrom: base.availableFrom,
-      img: isBase ? [
-        'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80',
-        'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80',
-        'https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=800&q=80',
-        'https://images.unsplash.com/photo-1500382017468-9049fee74a62?auto=format&fit=crop&w=800&q=80',
-        'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?auto=format&fit=crop&w=800&q=80',
-        'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80',
-      ][baseIndex] : scrapedImages[i - 6],
+      img: scrapedImages[i % scrapedImages.length], // Use only high-quality scraped images
       category: base.category,
       description: base.description,
     };
   });
 
-  for (const [index, l] of listingsToCreate.entries()) {
+  const entries = Array.from(listingsToCreate.entries());
+  for (const [index, l] of entries) {
     await prisma.listing.create({ 
       data: {
         ...l,

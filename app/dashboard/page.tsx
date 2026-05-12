@@ -14,90 +14,67 @@ export default async function DashboardPage() {
   const bookings = await getUserBookings(session.user.email!);
 
   return (
-    <div className="container mx-auto px-4 py-10">
-      <div className="max-w-screen-lg mx-auto">
-        <header className="mb-10">
-          <h1 className="text-3xl font-bold mb-2">Welcome back, {session.user.name?.split(' ')[0] || 'User'}!</h1>
-          <p className="text-gray-500">Member since May 2026 · {session.user.email}</p>
-        </header>
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-          {/* Left Column: Sidebar Stats */}
-          <div className="space-y-6">
-            <div className="border rounded-2xl p-6 bg-white shadow-sm">
-              <h3 className="font-bold text-lg mb-4">Account Stats</h3>
-              <div className="space-y-4">
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-500 text-sm">Total Bookings</span>
-                  <span className="font-bold">{bookings.length}</span>
-                </div>
-                <div className="flex justify-between items-center border-t pt-4">
-                  <span className="text-gray-500 text-sm">Member Status</span>
-                  <span className="text-rose-500 font-bold text-sm">SuperGuest</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="border rounded-2xl p-6 bg-slate-900 text-white shadow-sm">
-              <h3 className="font-bold text-lg mb-2">Hosting</h3>
-              <p className="text-sm text-slate-400 mb-6">Earn extra income by sharing your space in Rwanda.</p>
-              <button className="w-full bg-rose-500 text-white py-3 rounded-xl font-bold hover:bg-rose-600 transition">
-                Start Hosting
-              </button>
+    <div className="container mx-auto px-4 md:px-10 py-12">
+      <div className="max-w-screen-xl mx-auto">
+        <h1 className="text-3xl font-bold mb-8">Trips</h1>
+        
+        {bookings.length === 0 ? (
+          <div className="border-t pt-8">
+            <h2 className="text-2xl font-semibold mb-2">No trips booked...yet!</h2>
+            <p className="text-gray-500 mb-6">Time to dust off your bags and start planning your next adventure.</p>
+            <Link 
+              href="/" 
+              className="inline-block px-6 py-3 border-2 border-black rounded-lg font-bold hover:bg-gray-100 transition"
+            >
+              Start searching
+            </Link>
+            
+            <div className="mt-20 relative aspect-[21/9] rounded-2xl overflow-hidden">
+               <Image 
+                src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=2000&q=80"
+                alt="Travel inspiration"
+                fill
+                className="object-cover"
+               />
+               <div className="absolute inset-0 bg-black/20 flex items-center p-12">
+                 <p className="text-white text-3xl font-bold max-w-xs leading-tight">Where will you go next?</p>
+               </div>
             </div>
           </div>
-
-          {/* Right Column: Bookings List */}
-          <div className="lg:col-span-2">
-            <h2 className="text-2xl font-bold mb-6">Your Trips</h2>
-            
-            {bookings.length === 0 ? (
-              <div className="border rounded-2xl p-10 text-center bg-gray-50">
-                <p className="text-gray-500">You have no upcoming trips.</p>
-                <Link href="/listings" className="mt-4 inline-block text-rose-500 font-bold underline">
-                  Explore Rwanda
-                </Link>
-              </div>
-            ) : (
-              <div className="space-y-6">
-                {bookings.map((booking) => (
-                  <div key={booking.id} className="border rounded-2xl overflow-hidden bg-white shadow-sm flex flex-col md:flex-row">
-                    <div className="relative w-full md:w-48 h-48 md:h-auto">
-                      <Image 
-                        src={booking.img} 
-                        alt={booking.title} 
-                        fill 
-                        className="object-cover"
-                      />
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {bookings.map((booking) => (
+              <div key={booking.id} className="group border rounded-2xl overflow-hidden bg-white shadow-sm hover:shadow-md transition">
+                <div className="relative aspect-[4/3] overflow-hidden">
+                  <Image 
+                    src={booking.img} 
+                    alt={booking.title} 
+                    fill 
+                    className="object-cover group-hover:scale-105 transition duration-500"
+                  />
+                  <div className="absolute top-4 left-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider text-green-700">
+                    {booking.status}
+                  </div>
+                </div>
+                <div className="p-5">
+                  <h3 className="font-bold text-lg mb-1">{booking.title}</h3>
+                  <p className="text-sm text-gray-500 mb-4">{booking.location}</p>
+                  
+                  <div className="flex justify-between border-t pt-4">
+                    <div>
+                      <p className="text-[10px] uppercase font-bold text-gray-400">Stay dates</p>
+                      <p className="text-sm font-semibold">{booking.checkIn} - {booking.checkOut}</p>
                     </div>
-                    <div className="p-6 flex-1 flex flex-col">
-                      <div className="flex justify-between items-start mb-2">
-                        <div>
-                          <h4 className="font-bold text-lg">{booking.title}</h4>
-                          <p className="text-sm text-gray-500">{booking.location}</p>
-                        </div>
-                        <span className="bg-green-100 text-green-700 text-[10px] font-bold px-2 py-1 rounded uppercase">
-                          {booking.status}
-                        </span>
-                      </div>
-                      
-                      <div className="mt-auto grid grid-cols-2 gap-4 border-t pt-4">
-                        <div>
-                          <p className="text-[10px] uppercase text-gray-400 font-bold">Check-in</p>
-                          <p className="text-sm font-semibold">{booking.checkIn}</p>
-                        </div>
-                        <div>
-                          <p className="text-[10px] uppercase text-gray-400 font-bold">Check-out</p>
-                          <p className="text-sm font-semibold">{booking.checkOut}</p>
-                        </div>
-                      </div>
+                    <div className="text-right">
+                      <p className="text-[10px] uppercase font-bold text-gray-400">Total Price</p>
+                      <p className="text-sm font-bold text-rose-500">{booking.price.toLocaleString()} RWF</p>
                     </div>
                   </div>
-                ))}
+                </div>
               </div>
-            )}
+            ))}
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
