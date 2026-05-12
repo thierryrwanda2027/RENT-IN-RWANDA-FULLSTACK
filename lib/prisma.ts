@@ -13,6 +13,7 @@ let prismaInstance: PrismaClient;
 if (isServer) {
   const adapter = new PrismaLibSql({
     url: process.env.DATABASE_URL!,
+    authToken: process.env.TURSO_AUTH_TOKEN,
   });
   prismaInstance = new PrismaClient({ 
     adapter,
