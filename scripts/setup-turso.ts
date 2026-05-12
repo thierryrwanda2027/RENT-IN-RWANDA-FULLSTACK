@@ -21,8 +21,8 @@ async function main() {
     try {
       console.log(`Executing: ${statement.substring(0, 50)}...`);
       await prisma.$executeRawUnsafe(statement);
-    } catch (e) {
-      console.warn(`Error executing statement: ${e.message}`);
+    } catch (e: any) {
+      console.warn(`Error executing statement: ${e.message || 'Unknown error'}`);
     }
   }
 
@@ -30,4 +30,7 @@ async function main() {
   await prisma.$disconnect();
 }
 
-main().catch(console.error);
+main().catch((err: unknown) => {
+  console.error(err);
+  process.exit(1);
+});
