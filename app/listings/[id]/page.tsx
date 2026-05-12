@@ -1,6 +1,6 @@
 import { getListing, getListings } from "@/lib/listings";
 import { notFound } from "next/navigation";
-import Image from "next/image";
+import SafeImage from "@/components/SafeImage";
 import BookingForm from "@/components/BookingForm";
 import { FaStar, FaShare, FaHeart, FaMedal, FaCheckCircle } from "react-icons/fa";
 
@@ -55,26 +55,27 @@ export default async function ListingDetailPage({ params }: Props) {
         {/* Image Gallery - Airbnb Style */}
         <div className="grid grid-cols-1 md:grid-cols-4 md:grid-rows-2 gap-2 h-[300px] md:h-[450px] rounded-2xl overflow-hidden mb-12 shadow-inner">
           <div className="md:col-span-2 md:row-span-2 relative h-full w-full">
-            <Image
+            <SafeImage
               src={listing.img}
               alt={listing.title}
               fill
               className="object-cover hover:brightness-90 transition cursor-pointer"
               priority
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 70vw, 50vw"
             />
           </div>
           {/* Secondary images (faked using the same image with different crops/filters for demonstration) */}
           <div className="hidden md:block relative h-full w-full">
-            <Image src={listing.img} alt="Interior" fill className="object-cover hover:brightness-90 transition cursor-pointer opacity-90" />
+            <SafeImage src={listing.img} alt="Interior" fill className="object-cover hover:brightness-90 transition cursor-pointer opacity-90" sizes="25vw" />
           </div>
           <div className="hidden md:block relative h-full w-full">
-            <Image src={listing.img} alt="Bathroom" fill className="object-cover hover:brightness-90 transition cursor-pointer opacity-80" />
+            <SafeImage src={listing.img} alt="Bathroom" fill className="object-cover hover:brightness-90 transition cursor-pointer opacity-80" sizes="25vw" />
           </div>
           <div className="hidden md:block relative h-full w-full">
-            <Image src={listing.img} alt="Bedroom" fill className="object-cover hover:brightness-90 transition cursor-pointer opacity-70" />
+            <SafeImage src={listing.img} alt="Bedroom" fill className="object-cover hover:brightness-90 transition cursor-pointer opacity-70" sizes="25vw" />
           </div>
           <div className="hidden md:block relative h-full w-full">
-            <Image src={listing.img} alt="Kitchen" fill className="object-cover hover:brightness-90 transition cursor-pointer opacity-60" />
+            <SafeImage src={listing.img} alt="Kitchen" fill className="object-cover hover:brightness-90 transition cursor-pointer opacity-60" sizes="25vw" />
             <div className="absolute bottom-4 right-4 bg-white border border-black px-4 py-1.5 rounded-lg text-sm font-bold shadow-md cursor-pointer hover:bg-gray-50 z-10">
               Show all photos
             </div>
@@ -97,37 +98,37 @@ export default async function ListingDetailPage({ params }: Props) {
             {/* Unique Airbnb Features */}
             <div className="space-y-6 border-b pb-8 mb-8">
               <div className="flex gap-4">
-                <FaMedal size={24} className="mt-1" />
+                <FaMedal size={24} className="mt-1 text-zinc-900" />
                 <div>
-                  <h4 className="font-bold">Thierry is a Superhost</h4>
-                  <p className="text-sm text-gray-500">Superhosts are experienced, highly rated hosts who are committed to providing great stays for guests.</p>
+                  <h4 className="font-bold text-zinc-900">Thierry is a Superhost</h4>
+                  <p className="text-sm text-zinc-500">Superhosts are experienced, highly rated hosts who are committed to providing great stays for guests.</p>
                 </div>
               </div>
               <div className="flex gap-4">
-                <FaCheckCircle size={24} className="mt-1" />
+                <FaCheckCircle size={24} className="mt-1 text-zinc-900" />
                 <div>
-                  <h4 className="font-bold">Self check-in</h4>
-                  <p className="text-sm text-gray-500">Check yourself in with the lockbox.</p>
+                  <h4 className="font-bold text-zinc-900 text-neat">Self check-in</h4>
+                  <p className="text-sm text-zinc-500">Check yourself in with the lockbox.</p>
                 </div>
               </div>
             </div>
 
-            <div className="listing-description text-gray-700 leading-relaxed mb-8 text-[16px]">
+            <div className="listing-description text-zinc-700 leading-relaxed mb-8 text-[16px]">
               <p className="mb-4">{listing.description}</p>
-              <p className="underline font-bold cursor-pointer">Show more</p>
+              <p className="underline font-bold cursor-pointer text-zinc-900 hover:text-black">Show more</p>
             </div>
 
-            <div className="border-t pt-8">
-              <h3 className="text-xl font-bold mb-6">What this place offers</h3>
+            <div className="border-t border-zinc-200 pt-8">
+              <h3 className="text-xl font-bold mb-6 text-zinc-900">What this place offers</h3>
               <ul className="grid grid-cols-1 sm:grid-cols-2 gap-y-4">
-                <li className="flex items-center gap-4 text-gray-700">🍳 Kitchen</li>
-                <li className="flex items-center gap-4 text-gray-700">📶 Fast wifi – 45 Mbps</li>
-                <li className="flex items-center gap-4 text-gray-700">🚗 Free parking on premises</li>
-                <li className="flex items-center gap-4 text-gray-700">❄️ Central air conditioning</li>
-                <li className="flex items-center gap-4 text-gray-700">⛲ Lake view</li>
-                <li className="flex items-center gap-4 text-gray-700 text-gray-400 line-through">📺 TV</li>
+                <li className="flex items-center gap-4 text-zinc-700 font-medium text-sm">🍳 Kitchen</li>
+                <li className="flex items-center gap-4 text-zinc-700 font-medium text-sm">📶 Fast wifi – 45 Mbps</li>
+                <li className="flex items-center gap-4 text-zinc-700 font-medium text-sm">🚗 Free parking on premises</li>
+                <li className="flex items-center gap-4 text-zinc-700 font-medium text-sm">❄️ Central air conditioning</li>
+                <li className="flex items-center gap-4 text-zinc-700 font-medium text-sm">⛲ Lake view</li>
+                <li className="flex items-center gap-4 text-zinc-300 line-through text-sm">📺 TV</li>
               </ul>
-              <button className="mt-8 border border-black px-6 py-3 rounded-lg font-bold hover:bg-gray-100 transition">
+              <button className="mt-8 border border-zinc-900 px-6 py-3 rounded-lg font-bold text-zinc-900 hover:bg-zinc-50 transition-all">
                 Show all 24 amenities
               </button>
             </div>
@@ -135,14 +136,14 @@ export default async function ListingDetailPage({ params }: Props) {
 
           {/* Sticky Booking Sidebar */}
           <div className="relative">
-            <div className="sticky top-28 border rounded-2xl p-6 shadow-xl bg-white">
+            <div className="sticky top-28 border border-zinc-200 rounded-2xl p-6 shadow-2xl bg-white">
               <div className="flex justify-between items-center mb-6">
                 <div>
-                  <span className="text-2xl font-bold">{listing.price.toLocaleString()} RWF</span>
-                  <span className="text-gray-500 font-light"> night</span>
+                  <span className="text-2xl font-bold text-zinc-900">RWF {listing.price.toLocaleString()}</span>
+                  <span className="text-zinc-500 font-light"> night</span>
                 </div>
-                <div className="flex items-center gap-1 text-sm font-semibold">
-                  <FaStar /> {listing.rating} · <span className="underline text-gray-400 font-normal">12 reviews</span>
+                <div className="flex items-center gap-1 text-sm font-semibold text-zinc-900">
+                  <FaStar className="text-[12px]" /> {listing.rating.toFixed(1)} · <span className="underline text-zinc-400 font-normal">12 reviews</span>
                 </div>
               </div>
 

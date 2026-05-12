@@ -8,8 +8,11 @@ import { SessionProvider } from "@/components/SessionProvider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "THIERRY BNB | Vacation Rentals",
-  description: "Book unique stays and experiences in Rwanda",
+  title: "Thierry BNB | Premium Stays in Rwanda",
+  description: "Experience luxury and comfort in the heart of Rwanda. Book your perfect stay with Thierry BNB.",
+  icons: {
+    icon: '/favicon.png',
+  }
 };
 
 import { Navbar } from "@/components/Navbar";

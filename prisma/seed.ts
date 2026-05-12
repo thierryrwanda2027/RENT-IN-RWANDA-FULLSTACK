@@ -8,51 +8,17 @@ const adapter = new PrismaLibSql({
 });
 const prisma = new PrismaClient({ adapter });
 
-const scrapedImages = [
-  "https://www.houseinrwanda.com/sites/default/files/styles/advert_teaser/public/advert_photos/2026-05/WhatsApp%20Image%202026-05-05%20at%2011.44.36.jpeg?itok=GIzoR946",
-  "https://www.houseinrwanda.com/sites/default/files/styles/advert_teaser/public/advert_photos/2026-05/WhatsApp%20Image%202026-05-05%20at%2011.44.42%20%287%29.jpeg?itok=5y6PkD5r",
-  "https://www.houseinrwanda.com/sites/default/files/styles/advert_teaser/public/advert_photos/2026-05/WhatsApp%20Image%202026-05-05%20at%2011.44.42%20%289%29.jpeg?itok=aKzsfXht",
-  "https://www.houseinrwanda.com/sites/default/files/styles/advert_teaser/public/advert_photos/2026-05/WhatsApp%20Image%202026-05-05%20at%2011.44.41%20%283%29.jpeg?itok=N4A2Kjr1",
-  "https://www.houseinrwanda.com/sites/default/files/styles/advert_teaser/public/advert_photos/2026-05/WhatsApp%20Image%202026-05-05%20at%2011.44.42%20%286%29.jpeg?itok=wFBJY5hj",
-  "https://www.houseinrwanda.com/sites/default/files/styles/advert_teaser/public/advert_photos/2026-04/WhatsApp%20Image%202026-04-29%20at%2016.02.06.jpeg?itok=GoTaQmpd",
-  "https://www.houseinrwanda.com/sites/default/files/styles/advert_teaser/public/advert_photos/2026-04/WhatsApp%20Image%202026-04-29%20at%2016.02.20.jpeg?itok=bClX4eGZ",
-  "https://www.houseinrwanda.com/sites/default/files/styles/advert_teaser/public/advert_photos/2026-04/WhatsApp%20Image%202026-04-29%20at%2016.02.21%20%281%29.jpeg?itok=n2z0aB7A",
-  "https://www.houseinrwanda.com/sites/default/files/styles/advert_teaser/public/advert_photos/2026-04/WhatsApp%20Image%202026-04-29%20at%2016.02.21%20%282%29.jpeg?itok=hngv86S8",
-  "https://www.houseinrwanda.com/sites/default/files/styles/advert_teaser/public/advert_photos/2026-04/WhatsApp%20Image%202026-04-29%20at%2016.02.21%20%283%29.jpeg?itok=1UVIUuKl",
-  "https://www.houseinrwanda.com/sites/default/files/styles/advert_teaser/public/advert_photos/2025-10/75852762-d1ec-4a54-9b42-bffcbbb93f69.jpeg?itok=fsiWG7qW",
-  "https://www.houseinrwanda.com/sites/default/files/styles/advert_teaser/public/advert_photos/2025-10/07151d77-2be0-4933-bd8e-0e5e127a1734.jpg?itok=U5lM6m2S",
-  "https://www.houseinrwanda.com/sites/default/files/styles/advert_teaser/public/advert_photos/2025-10/3ef574e5-a149-4be8-a7fd-a9fd0110c8fd.jpg?itok=D1srcmhf",
-  "https://www.houseinrwanda.com/sites/default/files/styles/advert_teaser/public/advert_photos/2025-10/25511c8c-3e3b-4906-ac61-55ba8e490d4e.jpg?itok=vIa0GZFJ",
-  "https://www.houseinrwanda.com/sites/default/files/styles/advert_teaser/public/advert_photos/2025-10/a66da4c8-dfba-4170-b917-8f54f8553bb2.jpeg?itok=vxh1BGgB",
-  "https://www.houseinrwanda.com/sites/default/files/styles/advert_teaser/public/advert_photos/2026-04/WhatsApp%20Image%202026-04-22%20at%2014.46.21%20%281%29.jpeg?itok=S5cQtaA1",
-  "https://www.houseinrwanda.com/sites/default/files/styles/advert_teaser/public/advert_photos/2026-04/WhatsApp%20Image%202026-04-22%20at%2014.46.21%20%283%29.jpeg?itok=lZPfVJyX",
-  "https://www.houseinrwanda.com/sites/default/files/styles/advert_teaser/public/advert_photos/2026-04/WhatsApp%20Image%202026-04-22%20at%2014.46.21%20%282%29.jpeg?itok=_8BqCPyT",
-  "https://www.houseinrwanda.com/sites/default/files/styles/advert_teaser/public/advert_photos/2026-04/WhatsApp%20Image%202026-04-22%20at%2014.46.21_0.jpeg?itok=sfyJeAbf",
-  "https://www.houseinrwanda.com/sites/default/files/styles/advert_teaser/public/advert_photos/2026-04/WhatsApp%20Image%202026-04-22%20at%2014.46.35%20%285%29.jpeg?itok=GSguIDLH",
-  "https://www.houseinrwanda.com/sites/default/files/styles/advert_teaser/public/advert_photos/2026-04/Nile%201.jpg.jpeg?itok=W6s0piOq",
-  "https://www.houseinrwanda.com/sites/default/files/styles/advert_teaser/public/advert_photos/2025-11/Nile%201.jpg?itok=ucMPCA6L",
-  "https://www.houseinrwanda.com/sites/default/files/styles/advert_teaser/public/advert_photos/2025-11/Nile%202.jpg?itok=sITmVji4",
-  "https://www.houseinrwanda.com/sites/default/files/styles/advert_teaser/public/advert_photos/2025-11/Nile%203.jpg?itok=tRqSItFa",
-  "https://www.houseinrwanda.com/sites/default/files/styles/advert_teaser/public/advert_photos/2025-11/Nile%204.jpg?itok=SovPnHV9",
-  "https://www.houseinrwanda.com/sites/default/files/styles/advert_teaser/public/advert_photos/2026-03/WhatsApp%20Image%202026-03-16%20at%2016.14.43%20%287%29.jpeg?itok=8pvgPz9V",
-  "https://www.houseinrwanda.com/sites/default/files/styles/advert_teaser/public/advert_photos/2026-03/WhatsApp%20Image%202026-03-16%20at%2016.14.43%20%2810%29.jpeg?itok=qDP-tByy",
-  "https://www.houseinrwanda.com/sites/default/files/styles/advert_teaser/public/advert_photos/2026-03/WhatsApp%20Image%202026-03-16%20at%2016.14.43%20%285%29.jpeg?itok=iqcaLtDB",
-  "https://www.houseinrwanda.com/sites/default/files/styles/advert_teaser/public/advert_photos/2026-03/WhatsApp%20Image%202026-03-16%20at%2016.14.42%20%283%29.jpeg?itok=Z_uKtn3p",
-  "https://www.houseinrwanda.com/sites/default/files/styles/advert_teaser/public/advert_photos/2026-03/WhatsApp%20Image%202026-03-16%20at%2016.14.42%20%287%29.jpeg?itok=GvIMg9rC",
-  "https://www.houseinrwanda.com/sites/default/files/styles/advert_teaser/public/advert_photos/2026-03/WhatsApp%20Image%202026-03-06%20at%2013.16.38%20%281%29.jpeg?itok=x2DX61Bm",
-  "https://www.houseinrwanda.com/sites/default/files/styles/advert_teaser/public/advert_photos/2026-03/WhatsApp%20Image%202026-03-06%20at%2013.16.37%20%2815%29.jpeg?itok=WYoFP-J_",
-  "https://www.houseinrwanda.com/sites/default/files/styles/advert_teaser/public/advert_photos/2026-03/WhatsApp%20Image%202026-03-06%20at%2013.16.37%20%2810%29.jpeg?itok=o5yZ_bPC",
-  "https://www.houseinrwanda.com/sites/default/files/styles/advert_teaser/public/advert_photos/2026-03/WhatsApp%20Image%202026-03-06%20at%2013.16.37.jpeg?itok=Zrcbuxyu",
-  "https://www.houseinrwanda.com/sites/default/files/styles/advert_teaser/public/advert_photos/2026-03/WhatsApp%20Image%202026-03-06%20at%2013.16.36%20%285%29.jpeg?itok=DzZDm1HM",
-  "https://www.houseinrwanda.com/sites/default/files/styles/advert_teaser/public/advert_photos/2026-03/WhatsApp%20Image%202026-03-05%20at%2014.46.30.jpeg?itok=QKS-nj0-",
-  "https://www.houseinrwanda.com/sites/default/files/styles/advert_teaser/public/advert_photos/2026-03/WhatsApp%20Image%202026-03-05%20at%2014.46.30%20%282%29.jpeg?itok=h5k_dXOI",
-  "https://www.houseinrwanda.com/sites/default/files/styles/advert_teaser/public/advert_photos/2026-03/WhatsApp%20Image%202026-03-02%20at%2015.14.58%20%2822%29.jpeg?itok=AYx0OivB",
-  "https://www.houseinrwanda.com/sites/default/files/styles/advert_teaser/public/advert_photos/2026-03/WhatsApp%20Image%202026-03-02%20at%2015.14.58%20%2821%29.jpeg?itok=jD7DQgSW",
-  "https://www.houseinrwanda.com/sites/default/files/styles/advert_teaser/public/advert_photos/2026-03/WhatsApp%20Image%202026-03-02%20at%2015.14.58%20%283%29.jpeg?itok=D7rXoUo1",
-  "https://www.houseinrwanda.com/sites/default/files/styles/advert_teaser/public/advert_photos/2026-04/WhatsApp%20Image%202026-04-11%20at%207.03.14%20AM%20%282%29.jpeg?itok=raIiKewu",
-  "https://www.houseinrwanda.com/sites/default/files/styles/advert_teaser/public/advert_photos/2026-04/WhatsApp%20Image%202026-04-11%20at%207.03.14%20AM%20%282%29_0.jpeg?itok=L7bMZyVT",
-  "https://www.houseinrwanda.com/sites/default/files/styles/advert_teaser/public/advert_photos/2026-04/WhatsApp%20Image%202026-04-11%20at%207.03.15%20AM.jpeg?itok=g_HyCSVO",
-  "https://www.houseinrwanda.com/sites/default/files/styles/advert_teaser/public/advert_photos/2026-04/WhatsApp%20Image%202026-04-11%20at%207.03.09%20AM%20%281%29.jpeg?itok=nuU6C2Gc"
+const propertyImages = [
+  "https://images.unsplash.com/photo-1580587767526-cf3671a05b63?auto=format&q=80&w=1200",
+  "https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&q=80&w=1200",
+  "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&q=80&w=1200",
+  "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&q=80&w=1200",
+  "https://images.unsplash.com/photo-1600607687940-4e2a09695d51?auto=format&q=80&w=1200",
+  "https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?auto=format&q=80&w=1200",
+  "https://images.unsplash.com/photo-1600566753190-17f0bb2a6c3e?auto=format&q=80&w=1200",
+  "https://images.unsplash.com/photo-1600573472591-ee6b68d14c68?auto=format&q=80&w=1200",
+  "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&q=80&w=1200",
+  "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&q=80&w=1200",
 ];
 
 const baseListings = [
@@ -166,7 +132,7 @@ async function main() {
       superhost: base.superhost,
       available: i !== 2, // Make one unavailable
       availableFrom: base.availableFrom,
-      img: scrapedImages[i % scrapedImages.length], // Use only high-quality scraped images
+      img: propertyImages[i % propertyImages.length], 
       category: base.category,
       description: base.description,
     };

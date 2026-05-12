@@ -54,7 +54,11 @@ export async function createBooking(formData: FormData) {
   const totalPrice = listing.price * diffDays;
 
   try {
-    await prisma.booking.create({
+    console.log("Creating booking for user:", (session.user as any).id);
+    console.log("Listing ID:", listingId);
+    console.log("Dates:", checkIn, "to", checkOut);
+
+    const booking = await prisma.booking.create({
       data: {
         listingId,
         userId: (session.user as any).id,
@@ -66,14 +70,16 @@ export async function createBooking(formData: FormData) {
       }
     });
 
+    console.log("Booking created successfully:", booking.id);
+
     // Revalidate relevant pages
     revalidatePath("/dashboard");
     revalidatePath("/admin");
     revalidatePath(`/listings/${listingId}`);
     
     return { success: true };
-  } catch (error) {
-    console.error("Failed to create booking:", error);
-    return { success: false, error: "Database error occurred" };
+  } catch (error: any) {
+    console.error("CRITICAL ERROR in createBooking:", error.message || error);
+    return { success: false, error: error.message || "Database error occurred" };
   }
 }

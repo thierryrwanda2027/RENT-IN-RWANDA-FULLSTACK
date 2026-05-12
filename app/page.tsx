@@ -1,5 +1,5 @@
 import { getListings } from "@/lib/listings";
-import Image from "next/image";
+import SafeImage from "@/components/SafeImage";
 import Link from "next/link";
 import FavoriteButton from "@/components/FavoriteButton";
 import { FaHome, FaCampground, FaCity, FaUmbrellaBeach, FaTree } from "react-icons/fa";
@@ -35,12 +35,12 @@ export default async function HomePage() {
             <div key={listing.id} className="group cursor-pointer">
               <div className="relative w-full aspect-square overflow-hidden rounded-xl mb-3 shadow-md">
                 <Link href={`/listings/${listing.id}`} className="relative block h-full w-full">
-                  <Image
+                  <SafeImage
                     src={listing.img}
                     alt={listing.title}
                     fill
                     className="object-cover transition group-hover:scale-105"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 20vw"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     priority={listing.id <= 8}
                   />
                 </Link>
@@ -51,17 +51,17 @@ export default async function HomePage() {
               
               <div className="flex justify-between items-start">
                 <div>
-                  <h3 className="font-bold text-[15px]">{listing.location}</h3>
-                  <p className="text-gray-500 text-sm">{listing.category}</p>
-                  <p className="text-gray-400 text-sm mb-1">Available soon</p>
+                  <h3 className="font-bold text-[15px] text-zinc-900">{listing.location}</h3>
+                  <p className="text-zinc-500 text-sm">{listing.category}</p>
+                  <p className="text-zinc-400 text-sm mb-1">{listing.available ? 'Available now' : 'Available soon'}</p>
                   <p className="mt-1">
-                    <span className="font-bold">{listing.price.toLocaleString()} RWF</span>
-                    <span className="text-gray-400 font-light"> night</span>
+                    <span className="font-bold text-zinc-900">RWF {listing.price.toLocaleString()}</span>
+                    <span className="text-zinc-500 font-light"> night</span>
                   </p>
                 </div>
-                <div className="flex items-center gap-1 text-sm font-semibold">
-                  <span>★</span>
-                  <span>{listing.rating}</span>
+                <div className="flex items-center gap-1 text-sm font-semibold text-zinc-900">
+                  <span className="text-[12px]">★</span>
+                  <span>{listing.rating.toFixed(1)}</span>
                 </div>
               </div>
             </div>

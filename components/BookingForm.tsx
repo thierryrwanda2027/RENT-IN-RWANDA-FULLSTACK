@@ -38,18 +38,18 @@ export default function BookingForm({ listingId }: BookingFormProps) {
       <form action={handleSubmit} className="flex flex-col gap-4">
         <input type="hidden" name="listingId" value={listingId} />
         
-        <div className="grid grid-cols-2 border rounded-lg overflow-hidden">
-          <div className="p-2 border-r border-b">
-            <label className="block text-[10px] font-bold uppercase text-gray-500">Check-in</label>
-            <input type="date" name="checkIn" className="w-full text-sm outline-none" required />
+        <div className="grid grid-cols-2 border border-zinc-300 rounded-lg overflow-hidden focus-within:ring-1 focus-within:ring-zinc-900 focus-within:border-zinc-900 transition-all">
+          <div className="p-3 border-r border-b border-zinc-200 hover:bg-zinc-50 transition-colors">
+            <label className="block text-[10px] font-extrabold uppercase text-zinc-500 tracking-wider mb-0.5">Check-in</label>
+            <input type="date" name="checkIn" className="w-full text-[13px] font-medium outline-none bg-transparent text-zinc-900 cursor-pointer" required />
           </div>
-          <div className="p-2 border-b">
-            <label className="block text-[10px] font-bold uppercase text-gray-500">Checkout</label>
-            <input type="date" name="checkOut" className="w-full text-sm outline-none" required />
+          <div className="p-3 border-b border-zinc-200 hover:bg-zinc-50 transition-colors">
+            <label className="block text-[10px] font-extrabold uppercase text-zinc-500 tracking-wider mb-0.5">Checkout</label>
+            <input type="date" name="checkOut" className="w-full text-[13px] font-medium outline-none bg-transparent text-zinc-900 cursor-pointer" required />
           </div>
-          <div className="col-span-2 p-2">
-            <label className="block text-[10px] font-bold uppercase text-gray-500">Guests</label>
-            <select name="guests" className="w-full text-sm outline-none bg-transparent">
+          <div className="col-span-2 p-3 hover:bg-zinc-50 transition-colors">
+            <label className="block text-[10px] font-extrabold uppercase text-zinc-500 tracking-wider mb-0.5">Guests</label>
+            <select name="guests" className="w-full text-[13px] font-medium outline-none bg-transparent text-zinc-900 cursor-pointer">
               <option value="1">1 guest</option>
               <option value="2">2 guests</option>
               <option value="3">3 guests</option>
@@ -58,12 +58,16 @@ export default function BookingForm({ listingId }: BookingFormProps) {
           </div>
         </div>
 
-        {error && <p className="text-rose-500 text-xs font-medium">{error}</p>}
+        {error && (
+          <div className="bg-rose-50 border border-rose-100 p-3 rounded-lg">
+            <p className="text-rose-600 text-xs font-bold leading-tight">{error}</p>
+          </div>
+        )}
 
         <button
           type="submit"
           disabled={isPending}
-          className="w-full bg-rose-500 text-white py-3 rounded-lg font-bold hover:bg-rose-600 transition disabled:bg-gray-300 shadow-sm active:scale-[0.98]"
+          className="w-full bg-[#FF385C] text-white py-3.5 rounded-lg font-bold text-[16px] hover:brightness-95 transition-all disabled:bg-zinc-200 disabled:text-zinc-400 shadow-md active:scale-[0.98]"
         >
           {isPending ? "Reserving..." : "Reserve"}
         </button>
