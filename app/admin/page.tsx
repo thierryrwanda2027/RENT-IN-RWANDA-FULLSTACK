@@ -2,6 +2,8 @@ import { getAdminStats, getAllBookings } from "@/lib/listings";
 import { FaUsers, FaHome, FaMoneyBillWave, FaCalendarCheck, FaChartLine, FaShieldAlt, FaTools, FaBell } from "react-icons/fa";
 import Link from "next/link";
 
+export const dynamic = 'force-dynamic';
+
 export default async function AdminPage() {
   const stats = await getAdminStats();
   const recentBookings = await getAllBookings();

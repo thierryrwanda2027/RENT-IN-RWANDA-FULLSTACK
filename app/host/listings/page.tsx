@@ -5,6 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { FaPlus, FaEdit, FaTrash, FaEye } from "react-icons/fa";
 
+export const dynamic = 'force-dynamic';
+
 export default async function HostListingsPage() {
   const session = await auth();
 

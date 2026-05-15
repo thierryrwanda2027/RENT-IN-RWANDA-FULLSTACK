@@ -13,6 +13,8 @@ async function updateUserRole(userId: string, newRole: string) {
   revalidatePath("/admin/users");
 }
 
+export const dynamic = 'force-dynamic';
+
 export default async function AdminUsersPage() {
   const session = await auth();
 

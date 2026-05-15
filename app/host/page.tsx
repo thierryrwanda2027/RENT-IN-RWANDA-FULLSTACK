@@ -4,6 +4,8 @@ import Link from "next/link";
 import { auth } from "@/auth";
 import { FaPlus, FaCalendarCheck, FaStar, FaChartLine, FaWallet, FaCheckCircle } from "react-icons/fa";
 
+export const dynamic = 'force-dynamic';
+
 export default async function HostPage() {
   const session = await auth();
   const email = session?.user?.email || "";

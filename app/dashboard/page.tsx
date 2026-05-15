@@ -9,6 +9,8 @@ interface Props {
   searchParams: Promise<{ tab?: string }>;
 }
 
+export const dynamic = 'force-dynamic';
+
 export default async function DashboardPage({ searchParams }: Props) {
   const { tab = "upcoming" } = await searchParams;
   const session = await auth();
