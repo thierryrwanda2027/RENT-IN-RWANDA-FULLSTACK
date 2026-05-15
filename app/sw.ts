@@ -62,7 +62,7 @@ const serwist = new Serwist({
     },
     {
       // Default StaleWhileRevalidate for other same-origin requests
-      matcher: ({ url }) => url.origin === self.location.origin,
+      matcher: ({ url }) => url.origin === (self as any).location.origin,
       handler: new StaleWhileRevalidate({
         cacheName: "thierry-bnb-default",
       }),
@@ -72,8 +72,8 @@ const serwist = new Serwist({
     entries: [
       {
         url: "/listings/skeleton",
-        matcher: ({ request, url }) => 
-          request.mode === "navigate" && url.pathname.startsWith("/listings/"),
+        matcher: ({ request }) => 
+          request.mode === "navigate" && new URL(request.url).pathname.startsWith("/listings/"),
       },
       {
         url: "/app-shell",
