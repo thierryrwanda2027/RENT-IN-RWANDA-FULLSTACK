@@ -2,7 +2,7 @@ import { getListing, getListings } from "@/lib/listings";
 import { notFound } from "next/navigation";
 import SafeImage from "@/components/SafeImage";
 import BookingForm from "@/components/BookingForm";
-import { FaStar, FaShare, FaHeart, FaMedal, FaCheckCircle } from "react-icons/fa";
+import { FaStar, FaShare, FaHeart, FaMedal, FaCheckCircle, FaHome } from "react-icons/fa";
 
 interface Props {
   params: Promise<{ id: string }>;

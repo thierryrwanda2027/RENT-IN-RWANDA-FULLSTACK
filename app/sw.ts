@@ -1,6 +1,6 @@
 import type { PrecacheEntry, SerwistGlobalConfig } from "serwist";
 
-import { Serwist, BackgroundSyncPlugin, NetworkOnly, CacheFirst, StaleWhileRevalidate } from "serwist";
+import { Serwist, BackgroundSyncPlugin, NetworkOnly, CacheFirst, StaleWhileRevalidate, ExpirationPlugin } from "serwist";
 
 declare global {
   interface ServiceWorkerGlobalScope extends SerwistGlobalConfig {
@@ -38,10 +38,12 @@ const serwist = new Serwist({
         url.hostname.includes("pravatar.cc"),
       handler: new CacheFirst({
         cacheName: "thierry-bnb-images",
-        expiration: {
-          maxEntries: 100,
-          maxAgeSeconds: 30 * 24 * 60 * 60, // 30 Days
-        },
+        plugins: [
+          new ExpirationPlugin({
+            maxEntries: 100,
+            maxAgeSeconds: 30 * 24 * 60 * 60, // 30 Days
+          })
+        ]
       }),
     },
     {

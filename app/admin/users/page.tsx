@@ -16,12 +16,12 @@ async function updateUserRole(userId: string, newRole: string) {
 export default async function AdminUsersPage() {
   const session = await auth();
 
-  if (session?.user?.role !== "ADMIN") {
+  if ((session?.user as any)?.role !== "ADMIN") {
     redirect("/");
   }
 
   const users = await prisma.user.findMany({
-    orderBy: { createdAt: 'desc' }
+    orderBy: { id: 'desc' }
   });
 
   return (

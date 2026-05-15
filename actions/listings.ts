@@ -35,7 +35,7 @@ export async function createListing(formData: FormData) {
   if (!validation.success) {
     return { 
       success: false, 
-      error: validation.error.errors[0].message 
+      error: validation.error.issues[0].message 
     };
   }
 
@@ -74,7 +74,7 @@ export async function deleteListing(id: number) {
       where: { id }
     });
 
-    if (!listing || (listing.userId !== (session.user as any).id && session.user.role !== 'ADMIN')) {
+    if (!listing || (listing.userId !== (session.user as any).id && (session.user as any).role !== 'ADMIN')) {
       return { success: false, error: "Unauthorized" };
     }
 

@@ -273,7 +273,7 @@ export function Navbar() {
                       </div>
                       <div className="py-2 border-b border-zinc-100">
                         <Link href="/host" className="block px-4 py-3 text-sm text-zinc-900 hover:bg-zinc-50">Manage listings</Link>
-                        {session.user.role === 'ADMIN' && (
+                        {(session.user as any).role === 'ADMIN' && (
                           <Link href="/admin" className="block px-4 py-3 text-sm font-bold text-rose-500 hover:bg-zinc-50">Admin Dashboard</Link>
                         )}
                         <Link href="#" className="block px-4 py-3 text-sm text-zinc-700 hover:bg-zinc-50">Account settings</Link>

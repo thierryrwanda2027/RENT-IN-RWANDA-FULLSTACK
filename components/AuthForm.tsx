@@ -39,7 +39,7 @@ export function AuthForm() {
           // Fetch session to check role and redirect accordingly
           const response = await fetch('/api/auth/session');
           const session = await response.json();
-          const role = session?.user?.role;
+          const role = (session?.user as any)?.role;
 
           if (role === 'ADMIN') {
             router.push("/admin");
