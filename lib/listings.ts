@@ -1,9 +1,24 @@
 import { Listing } from '../types';
 import { prisma } from './prisma';
 
-export async function getListings(): Promise<Listing[]> {
+export async function getListings(params?: { category?: string, location?: string, guests?: number }): Promise<Listing[]> {
   try {
-    const listings = await prisma.listing.findMany();
+    const { category, location, guests } = params || {};
+    
+    const where: any = {};
+    
+    if (category) {
+      where.category = { equals: category };
+    }
+    
+    if (location) {
+      where.location = { contains: location };
+    }
+    
+    const listings = await prisma.listing.findMany({
+      where
+    });
+    
     return listings as Listing[];
   } catch (error) {
     console.error('Error fetching listings:', error);
@@ -28,21 +43,18 @@ export async function getListing(id: string | number): Promise<Listing | null> {
 
 export async function getAdminStats() {
   try {
-    const [totalUsers, totalListings, totalRevenueResult, activeBookings] = await Promise.all([
+    const [totalUsers, totalListings, totalRevenueResult, activeBookings, hostCount] = await Promise.all([
       prisma.user.count(),
       prisma.listing.count(),
       prisma.booking.aggregate({
-        _sum: {
-          totalPrice: true
-        },
-        where: {
-          status: 'Confirmed'
-        }
+        _sum: { totalPrice: true },
+        where: { status: 'CONFIRMED' }
       }),
       prisma.booking.count({
-        where: {
-          status: 'Confirmed'
-        }
+        where: { status: 'CONFIRMED' }
+      }),
+      prisma.user.count({
+        where: { role: 'HOST' }
       })
     ]);
 
@@ -50,7 +62,8 @@ export async function getAdminStats() {
       totalUsers,
       totalListings,
       totalRevenue: totalRevenueResult._sum.totalPrice || 0,
-      activeBookings
+      activeBookings,
+      hostCount
     };
   } catch (error) {
     console.error('Error fetching admin stats:', error);
@@ -58,7 +71,8 @@ export async function getAdminStats() {
       totalUsers: 0,
       totalListings: 0,
       totalRevenue: 0,
-      activeBookings: 0
+      activeBookings: 0,
+      hostCount: 0
     };
   }
 }
@@ -130,15 +144,54 @@ export async function getUserBookings(email: string) {
 
 export async function getHostListings(email: string) {
   try {
-    // For now, since we don't have a direct "host" field on Listing yet (we should add it),
-    // we'll just return all listings if the user is an admin or host.
-    // In a real app, you'd filter by listing.hostId
+    const user = await prisma.user.findUnique({ where: { email } });
+    if (!user) return [];
+
     const listings = await prisma.listing.findMany({
-      take: 10 // Limit for now
+      where: {
+        userId: user.id
+      }
     });
     return listings as Listing[];
   } catch (error) {
     console.error(`Error fetching host listings for ${email}:`, error);
     return [];
+  }
+}
+
+export async function getHostStats(email: string) {
+  try {
+    const user = await prisma.user.findUnique({ where: { email } });
+    if (!user) return { totalEarnings: 0, pendingPayout: 0, activeReservations: 0, totalReservations: 0 };
+
+    const listings = await prisma.listing.findMany({
+      where: { userId: user.id },
+      select: { id: true }
+    });
+    
+    const listingIds = listings.map(l => l.id);
+
+    const [earningsResult, activeReservations, totalReservations] = await Promise.all([
+      prisma.booking.aggregate({
+        _sum: { totalPrice: true },
+        where: { listingId: { in: listingIds }, status: 'CONFIRMED' }
+      }),
+      prisma.booking.count({
+        where: { listingId: { in: listingIds }, status: 'CONFIRMED' }
+      }),
+      prisma.booking.count({
+        where: { listingId: { in: listingIds } }
+      })
+    ]);
+
+    return {
+      totalEarnings: earningsResult._sum.totalPrice || 0,
+      pendingPayout: (earningsResult._sum.totalPrice || 0) * 0.15, // Commission/Tax mock
+      activeReservations,
+      totalReservations
+    };
+  } catch (error) {
+    console.error('Error fetching host stats:', error);
+    return { totalEarnings: 0, pendingPayout: 0, activeReservations: 0, totalReservations: 0 };
   }
 }

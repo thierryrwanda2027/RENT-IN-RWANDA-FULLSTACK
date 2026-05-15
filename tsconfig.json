@@ -38,6 +38,6 @@
   "exclude": [
     "node_modules",
     "legacy-vite",
-    "airbnb-app"
+    "rent-in-rwanda-app"
   ]
 }

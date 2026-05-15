@@ -4,31 +4,68 @@ import React, { useState, useEffect } from 'react';
 import { useRouter, useParams, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import { IoChevronBack, IoStar } from 'react-icons/io5';
-import { getListingById } from '@/lib/listings';
+import { Listing } from '@/types';
+import { createBooking } from '@/actions/bookings';
+import { useTransition } from 'react';
 
 export default function CheckoutPage() {
   const router = useRouter();
   const { id } = useParams();
   const searchParams = useSearchParams();
-  const [listing, setListing] = useState<any>(null);
-
-  // Get booking details from URL
-  const checkIn = searchParams.get('checkIn') || 'Jul 31, 2026';
-  const checkOut = searchParams.get('checkOut') || 'Aug 2, 2026';
-  const guests = searchParams.get('guests') || '1 adult';
+  const [listing, setListing] = useState<Listing | null>(null);
+  const [isPending, startTransition] = useTransition();
+  const guestsParam = searchParams.get('guests') || '1 adult';
+  const checkIn = searchParams.get('checkIn') || '';
+  const checkOut = searchParams.get('checkOut') || '';
+  const guests = guestsParam.split(' ')[0] || '1';
 
   useEffect(() => {
     const fetchListing = async () => {
-      const data = await getListingById(Number(id));
-      setListing(data);
+      try {
+        const response = await fetch(`/api/listings/${id}`);
+        if (!response.ok) throw new Error('Failed to fetch listing');
+        const data = await response.json();
+        setListing(data);
+      } catch (error) {
+        console.error('Error fetching listing:', error);
+      }
     };
-    fetchListing();
+    if (id) fetchListing();
   }, [id]);
 
   if (!listing) return null;
 
-  const totalNights = 2; // Demo logic
+  const calculateNights = (start: string, end: string) => {
+    if (!start || !end) return 1;
+    const s = new Date(start);
+    const e = new Date(end);
+    const diff = e.getTime() - s.getTime();
+    return Math.max(1, Math.ceil(diff / (1000 * 60 * 60 * 24)));
+  };
+
+  const totalNights = calculateNights(checkIn, checkOut);
   const totalPrice = listing.price * totalNights;
+
+  const handleConfirm = async () => {
+    const formData = new FormData();
+    formData.append('listingId', id as string);
+    formData.append('checkIn', checkIn);
+    formData.append('checkOut', checkOut);
+    formData.append('guests', guests);
+
+    startTransition(async () => {
+      try {
+        const result = await createBooking(formData);
+        if (result.success) {
+          router.push('/dashboard');
+        } else {
+          alert(result.error || 'Something went wrong. Please check if you are logged in.');
+        }
+      } catch (error: any) {
+        alert(error.message || 'Failed to confirm booking');
+      }
+    });
+  };
 
   return (
     <div className="min-h-screen bg-white pb-20">
@@ -69,8 +106,12 @@ export default function CheckoutPage() {
               </label>
             </div>
             
-            <button className="mt-6 bg-zinc-900 text-white px-10 py-4 rounded-xl font-bold hover:bg-zinc-800 transition-all transform active:scale-95 shadow-lg">
-              Next
+            <button 
+              onClick={handleConfirm}
+              disabled={isPending}
+              className="mt-6 bg-zinc-900 text-white px-10 py-4 rounded-xl font-bold hover:bg-zinc-800 transition-all transform active:scale-95 shadow-lg disabled:bg-zinc-400 disabled:cursor-not-allowed"
+            >
+              {isPending ? 'Processing...' : 'Confirm and pay'}
             </button>
           </section>
 

@@ -47,7 +47,7 @@ export default async function ListingDetailPage({ params }: Props) {
           </div>
         </div>
 
-        {/* Image Gallery - Airbnb Style */}
+        {/* Image Gallery - RENT IN RWANDA Style */}
         <div className="grid grid-cols-1 md:grid-cols-4 md:grid-rows-2 gap-2 h-[300px] md:h-[450px] rounded-2xl overflow-hidden mb-12 shadow-inner">
           <div className="md:col-span-2 md:row-span-2 relative h-full w-full">
             <SafeImage
@@ -82,7 +82,7 @@ export default async function ListingDetailPage({ params }: Props) {
           <div className="md:col-span-2">
             <div className="flex justify-between items-center border-b pb-8 mb-8">
               <div>
-                <h2 className="text-xl md:text-2xl font-bold mb-1">Entire home hosted by Thierry</h2>
+                <h2 className="text-xl md:text-2xl font-bold mb-1">Entire home hosted by RENT IN RWANDA</h2>
                 <p className="text-gray-500 font-light">4 guests · 2 bedrooms · 2 beds · 2 baths</p>
               </div>
               <div className="w-14 h-14 bg-slate-200 rounded-full flex items-center justify-center text-xl font-bold text-slate-500">
@@ -90,12 +90,12 @@ export default async function ListingDetailPage({ params }: Props) {
               </div>
             </div>
 
-            {/* Unique Airbnb Features */}
+            {/* Unique RENT IN RWANDA Features */}
             <div className="space-y-6 border-b pb-8 mb-8">
               <div className="flex gap-4">
                 <FaMedal size={24} className="mt-1 text-zinc-900" />
                 <div>
-                  <h4 className="font-bold text-zinc-900">Thierry is a Superhost</h4>
+                  <h4 className="font-bold text-zinc-900">RENT IN RWANDA is a Superhost</h4>
                   <p className="text-sm text-zinc-500">Superhosts are experienced, highly rated hosts who are committed to providing great stays for guests.</p>
                 </div>
               </div>
@@ -156,7 +156,7 @@ export default async function ListingDetailPage({ params }: Props) {
                   <span>25,000 RWF</span>
                 </div>
                 <div className="flex justify-between underline">
-                  <span>Airbnb service fee</span>
+                  <span>RENT IN RWANDA service fee</span>
                   <span>15,000 RWF</span>
                 </div>
                 <div className="pt-4 border-t flex justify-between font-bold text-black text-base">
@@ -167,6 +167,59 @@ export default async function ListingDetailPage({ params }: Props) {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Map Section */}
+      <div className="max-w-screen-xl mx-auto py-12 border-t border-zinc-200 mt-12">
+        <h3 className="text-2xl font-bold mb-6 text-zinc-900">Where you'll be</h3>
+        <p className="mb-6 text-zinc-700">{listing.location}</p>
+        <div className="w-full h-[480px] bg-zinc-100 rounded-2xl overflow-hidden relative border border-zinc-200">
+           {/* Mock Map */}
+           <SafeImage 
+             src="https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&w=2000&q=80" 
+             alt="Map view" 
+             fill 
+             className="object-cover opacity-80" 
+           />
+           <div className="absolute inset-0 flex items-center justify-center">
+             <div className="w-20 h-20 bg-rose-500/30 rounded-full flex items-center justify-center animate-pulse">
+                <div className="w-12 h-12 bg-rose-500 rounded-full text-white flex items-center justify-center shadow-2xl">
+                  <FaHome size={20} />
+                </div>
+             </div>
+           </div>
+        </div>
+      </div>
+
+      {/* Reviews Section */}
+      <div className="max-w-screen-xl mx-auto py-12 border-t border-zinc-200">
+        <div className="flex items-center gap-2 text-2xl font-bold mb-8 text-zinc-900">
+          <FaStar /> <span>{listing.rating.toFixed(1)} · 12 reviews</span>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-10">
+          {[
+            { name: "Sarah", date: "October 2026", text: "Incredible place! The views were absolutely breathtaking and the host was super responsive. Highly recommend.", img: "https://i.pravatar.cc/150?u=sarah" },
+            { name: "Michael", date: "September 2026", text: "Very clean and modern. The self check-in was a breeze. Will definitely stay here again next time I'm in Rwanda.", img: "https://i.pravatar.cc/150?u=michael" },
+            { name: "Elena", date: "August 2026", text: "Great location, close to everything we needed. The kitchen was well-stocked and the bed was very comfortable.", img: "https://i.pravatar.cc/150?u=elena" },
+            { name: "David", date: "July 2026", text: "Beautiful property. We loved spending evenings on the patio. The wifi was also fast enough for remote work.", img: "https://i.pravatar.cc/150?u=david" },
+          ].map((review, i) => (
+            <div key={i}>
+              <div className="flex items-center gap-4 mb-4">
+                <div className="w-12 h-12 rounded-full overflow-hidden relative bg-zinc-200">
+                   <SafeImage src={review.img} alt={review.name} fill className="object-cover" />
+                </div>
+                <div>
+                  <h4 className="font-bold text-zinc-900">{review.name}</h4>
+                  <p className="text-sm text-zinc-500">{review.date}</p>
+                </div>
+              </div>
+              <p className="text-zinc-700 leading-relaxed">{review.text}</p>
+            </div>
+          ))}
+        </div>
+        <button className="mt-8 border border-zinc-900 px-6 py-3 rounded-lg font-bold text-zinc-900 hover:bg-zinc-50 transition-all">
+          Show all 12 reviews
+        </button>
       </div>
     </div>
   );

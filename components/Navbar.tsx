@@ -1,9 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
 import { useState, useRef, useEffect } from "react";
 import { FaUserCircle, FaBars, FaSearch, FaGlobe, FaMapMarkerAlt, FaPlane, FaUtensils, FaPlus, FaMinus } from "react-icons/fa";
+import Logo from "./Logo";
 
 export function Navbar() {
   const { data: session } = useSession();
@@ -11,7 +13,12 @@ export function Navbar() {
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
   const [activeSearchTab, setActiveSearchTab] = useState('homes');
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  
+  const [location, setLocation] = useState("");
+  const [guests, setGuests] = useState(1);
+  
   const searchRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
 
   // Close search/menu on click outside
   useEffect(() => {
@@ -25,20 +32,25 @@ export function Navbar() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  const handleSearch = () => {
+    const params = new URLSearchParams();
+    if (location) params.set("location", location);
+    if (guests > 1) params.set("guests", guests.toString());
+    
+    setIsSearchExpanded(false);
+    setActiveDropdown(null);
+    router.push(`/?${params.toString()}`);
+  };
+
   return (
     <nav className={`border-b bg-white sticky top-0 z-50 transition-all duration-300 ${isSearchExpanded ? 'pb-24 pt-4' : 'py-4'} shadow-sm`}>
       <div className="container mx-auto px-4 md:px-10">
         <div className="flex justify-between items-center relative">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 group shrink-0">
-            <div className="bg-rose-500 p-1.5 rounded-lg transition-transform group-hover:scale-110">
-              <svg viewBox="0 0 32 32" className="w-6 h-6 fill-white" xmlns="http://www.w3.org/2000/svg">
-                <path d="M16 1L1 12h3v17h10v-8h4v8h10V12h3L16 1z"/>
-              </svg>
+            <div className="flex items-center gap-2">
+              <Logo />
             </div>
-            <span className="text-rose-500 font-bold text-xl tracking-tighter hidden md:block">
-              thierry bnb
-            </span>
           </Link>
 
           {/* Collapsed/Expanded Search Toggle Area */}
@@ -92,6 +104,8 @@ export function Navbar() {
                   <input 
                     type="text" 
                     placeholder="Search destinations" 
+                    value={location}
+                    onChange={(e) => setLocation(e.target.value)}
                     className="bg-transparent text-sm w-full outline-none text-zinc-900 placeholder:text-zinc-400"
                   />
                   {activeDropdown === 'where' && (
@@ -104,7 +118,14 @@ export function Navbar() {
                           { name: 'London, United Kingdom', sub: "For its bustling nightlife", icon: <FaGlobe className="text-zinc-700" /> },
                           { name: 'Barcelona, Spain', sub: "Popular beach destination", icon: <FaUtensils className="text-rose-500" /> },
                         ].map((item, idx) => (
-                          <div key={idx} className="flex items-center gap-4 p-2 hover:bg-zinc-100 rounded-xl transition cursor-pointer">
+                          <div 
+                            key={idx} 
+                            className="flex items-center gap-4 p-2 hover:bg-zinc-100 rounded-xl transition cursor-pointer"
+                            onClick={() => {
+                              setLocation(item.name.split(',')[0]);
+                              setActiveDropdown('when');
+                            }}
+                          >
                             <div className="w-12 h-12 bg-zinc-100 rounded-xl flex items-center justify-center text-xl">
                               {item.icon}
                             </div>
@@ -166,9 +187,12 @@ export function Navbar() {
                 >
                   <div className="flex-1">
                     <p className="text-[10px] font-extrabold uppercase text-zinc-900 tracking-wider">Who</p>
-                    <p className="text-sm text-zinc-400">Add guests</p>
+                    <p className="text-sm text-zinc-400">{guests > 0 ? `${guests} guest${guests > 1 ? 's' : ''}` : 'Add guests'}</p>
                   </div>
-                  <div className="bg-rose-500 p-4 rounded-full text-white hover:bg-rose-600 transition flex items-center gap-2">
+                  <div 
+                    onClick={(e) => { e.stopPropagation(); handleSearch(); }}
+                    className="bg-rose-500 p-4 rounded-full text-white hover:bg-rose-600 transition flex items-center gap-2"
+                  >
                     <FaSearch size={16} />
                     <span className="font-bold text-sm pr-2">Search</span>
                   </div>
@@ -187,9 +211,19 @@ export function Navbar() {
                           </div>
                           {!item.link && (
                             <div className="flex items-center gap-4">
-                              <button className="w-8 h-8 rounded-full border border-zinc-300 flex items-center justify-center text-zinc-400 hover:border-zinc-900 hover:text-zinc-900"><FaMinus size={10} /></button>
-                              <span className="text-sm font-medium w-4 text-center">0</span>
-                              <button className="w-8 h-8 rounded-full border border-zinc-300 flex items-center justify-center text-zinc-400 hover:border-zinc-900 hover:text-zinc-900"><FaPlus size={10} /></button>
+                              <button 
+                                onClick={() => setGuests(Math.max(1, guests - 1))}
+                                className="w-8 h-8 rounded-full border border-zinc-300 flex items-center justify-center text-zinc-400 hover:border-zinc-900 hover:text-zinc-900"
+                              >
+                                <FaMinus size={10} />
+                              </button>
+                              <span className="text-sm font-medium w-4 text-center">{guests}</span>
+                              <button 
+                                onClick={() => setGuests(guests + 1)}
+                                className="w-8 h-8 rounded-full border border-zinc-300 flex items-center justify-center text-zinc-400 hover:border-zinc-900 hover:text-zinc-900"
+                              >
+                                <FaPlus size={10} />
+                              </button>
                             </div>
                           )}
                         </div>
@@ -202,11 +236,11 @@ export function Navbar() {
           </div>
 
           {/* User Menu */}
-          <div className="flex items-center gap-4 shrink-0">
-            <Link href="/host" className="hidden lg:block text-sm font-semibold hover:bg-zinc-100 px-4 py-3 rounded-full transition text-zinc-900">
-              Become a host
+          <div className="flex items-center gap-1 md:gap-4 shrink-0">
+            <Link href="/host" className="hidden lg:block text-sm font-bold hover:bg-zinc-100 px-4 py-3 rounded-full transition text-zinc-900">
+              RENT IN RWANDA your home
             </Link>
-            <div className="p-3 hover:bg-zinc-100 rounded-full cursor-pointer transition text-zinc-900">
+            <div className="p-3 hover:bg-zinc-100 rounded-full cursor-pointer transition text-zinc-900 hidden md:block">
               <FaGlobe size={16} />
             </div>
             
@@ -222,37 +256,42 @@ export function Navbar() {
 
               {isMenuOpen && (
                 <div className="absolute right-0 mt-3 w-72 bg-white border border-zinc-200 rounded-xl shadow-2xl py-2 overflow-hidden animate-in fade-in zoom-in duration-200">
-                  <div className="py-2 border-b border-zinc-100">
-                    <Link href="#" className="block px-4 py-3 text-sm font-bold text-zinc-900 hover:bg-zinc-50">Wishlists</Link>
-                    <Link href="/dashboard" className="block px-4 py-3 text-sm text-zinc-900 hover:bg-zinc-50">Trips</Link>
-                    <Link href="#" className="block px-4 py-3 text-sm text-zinc-900 hover:bg-zinc-50">Messages</Link>
-                    <Link href="#" className="block px-4 py-3 text-sm text-zinc-900 hover:bg-zinc-50">Profile</Link>
-                  </div>
-                  <div className="py-2 border-b border-zinc-100">
-                    <Link href="#" className="block px-4 py-3 text-sm text-zinc-700 hover:bg-zinc-50">Account settings</Link>
-                    <div className="flex items-center justify-between px-4 py-3 text-sm text-zinc-700 hover:bg-zinc-50 cursor-pointer">
-                      <div className="flex items-center gap-3"><FaGlobe /> <span>Languages & currency</span></div>
+                  {!session ? (
+                    <div className="py-2">
+                      <Link href="/login" className="block px-4 py-3 text-sm font-bold text-zinc-900 hover:bg-zinc-50">Log in</Link>
+                      <Link href="/login?register=true" className="block px-4 py-3 text-sm text-zinc-900 hover:bg-zinc-50 border-b border-zinc-100">Sign up</Link>
+                      <div className="py-2">
+                        <Link href="/host" className="block px-4 py-3 text-sm text-zinc-700 hover:bg-zinc-50">RENT IN RWANDA your home</Link>
+                        <Link href="#" className="block px-4 py-3 text-sm text-zinc-700 hover:bg-zinc-50">Help Center</Link>
+                      </div>
                     </div>
-                    <Link href="/listings" className="block px-4 py-3 text-sm text-zinc-700 hover:bg-zinc-50">Help Center</Link>
-                  </div>
-                  <div className="px-4 py-4 bg-zinc-50 flex items-center justify-between group cursor-pointer border-b border-zinc-100">
-                    <div>
-                      <p className="text-sm font-bold text-zinc-900">Become a host</p>
-                      <p className="text-[11px] text-zinc-500 max-w-[150px]">It's easy to start hosting and earn extra income.</p>
-                    </div>
-                    <img src="https://a0.muscache.com/pictures/b4317891-b361-4686-acc2-acc1de473062.jpg" alt="Host" className="w-10 h-10 object-cover rounded-md group-hover:scale-105 transition" />
-                  </div>
-                  <div className="py-2">
-                    <Link href="#" className="block px-4 py-3 text-sm text-zinc-700 hover:bg-zinc-50">Refer a Host</Link>
-                    <Link href="#" className="block px-4 py-3 text-sm text-zinc-700 hover:bg-zinc-50">Find a co-host</Link>
-                    <Link href="#" className="block px-4 py-3 text-sm text-zinc-700 hover:bg-zinc-50 border-b border-zinc-100 pb-4">Gift cards</Link>
-                    <button 
-                      onClick={() => signOut({ callbackUrl: '/' })}
-                      className="w-full text-left px-4 py-3 text-sm hover:bg-zinc-50 text-zinc-900 pt-4"
-                    >
-                      Log out
-                    </button>
-                  </div>
+                  ) : (
+                    <>
+                      <div className="py-2 border-b border-zinc-100">
+                        <Link href="/dashboard" className="block px-4 py-3 text-sm font-bold text-zinc-900 hover:bg-zinc-50">Trips</Link>
+                        <Link href="#" className="block px-4 py-3 text-sm text-zinc-900 hover:bg-zinc-50">Wishlists</Link>
+                      </div>
+                      <div className="py-2 border-b border-zinc-100">
+                        <Link href="/host" className="block px-4 py-3 text-sm text-zinc-900 hover:bg-zinc-50">Manage listings</Link>
+                        {session.user.role === 'ADMIN' && (
+                          <Link href="/admin" className="block px-4 py-3 text-sm font-bold text-rose-500 hover:bg-zinc-50">Admin Dashboard</Link>
+                        )}
+                        <Link href="#" className="block px-4 py-3 text-sm text-zinc-700 hover:bg-zinc-50">Account settings</Link>
+                      </div>
+                      <div className="py-2 border-b border-zinc-100">
+                        <Link href="/host" className="block px-4 py-3 text-sm text-zinc-700 hover:bg-zinc-50">RENT IN RWANDA your home</Link>
+                        <Link href="#" className="block px-4 py-3 text-sm text-zinc-700 hover:bg-zinc-50">Help Center</Link>
+                      </div>
+                      <div className="py-2">
+                        <button 
+                          onClick={() => signOut({ callbackUrl: '/' })}
+                          className="w-full text-left px-4 py-3 text-sm hover:bg-zinc-50 text-zinc-900"
+                        >
+                          Log out
+                        </button>
+                      </div>
+                    </>
+                  )}
                 </div>
               )}
             </div>

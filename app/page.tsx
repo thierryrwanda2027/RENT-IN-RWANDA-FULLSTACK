@@ -6,15 +6,28 @@ import { FaHome, FaCampground, FaCity, FaUmbrellaBeach, FaTree } from "react-ico
 
 export const dynamic = 'force-dynamic';
 
-export default async function HomePage() {
-  const listings = await getListings();
+interface Props {
+  searchParams: Promise<{ 
+    category?: string;
+    location?: string;
+    guests?: string;
+  }>;
+}
+
+export default async function HomePage({ searchParams }: Props) {
+  const { category, location, guests } = await searchParams;
+  const listings = await getListings({ 
+    category, 
+    location, 
+    guests: guests ? parseInt(guests) : undefined 
+  });
 
   const categories = [
-    { label: 'Modern', icon: FaHome },
-    { label: 'Camping', icon: FaCampground },
-    { label: 'City', icon: FaCity },
-    { label: 'Beach', icon: FaUmbrellaBeach },
-    { label: 'Countryside', icon: FaTree },
+    { label: 'Modern', icon: FaHome, value: 'modern' },
+    { label: 'Camping', icon: FaCampground, value: 'camping' },
+    { label: 'City', icon: FaCity, value: 'city' },
+    { label: 'Beach', icon: FaUmbrellaBeach, value: 'beach' },
+    { label: 'Countryside', icon: FaTree, value: 'countryside' },
   ];
 
   return (
@@ -23,10 +36,18 @@ export default async function HomePage() {
       <div className="sticky top-[81px] z-40 bg-white border-b py-4 shadow-sm overflow-x-auto no-scrollbar">
         <div className="container mx-auto px-4 md:px-10 flex gap-8 md:gap-12 items-center justify-start md:justify-center">
           {categories.map((cat) => (
-            <button key={cat.label} className="flex flex-col items-center gap-2 text-gray-500 hover:text-black border-b-2 border-transparent hover:border-gray-300 pb-2 transition whitespace-nowrap min-w-fit">
+            <Link 
+              key={cat.label} 
+              href={`/?category=${cat.value}`}
+              className={`flex flex-col items-center gap-2 transition whitespace-nowrap min-w-fit pb-2 border-b-2 ${
+                category === cat.value 
+                  ? 'text-black border-black' 
+                  : 'text-gray-500 border-transparent hover:text-black hover:border-gray-300'
+              }`}
+            >
               <cat.icon size={24} />
               <span className="text-xs font-semibold">{cat.label}</span>
-            </button>
+            </Link>
           ))}
         </div>
       </div>
@@ -76,6 +97,14 @@ export default async function HomePage() {
             <p className="text-gray-400 mt-2">Try adjusting your filters or check back later.</p>
           </div>
         )}
+      </div>
+
+      {/* Floating Map Button */}
+      <div className="fixed bottom-10 left-1/2 -translate-x-1/2 z-50">
+        <button className="bg-zinc-900 hover:bg-black text-white px-5 py-3 rounded-full font-bold flex items-center gap-2 shadow-lg hover:scale-105 transition-transform">
+          <span>Show map</span>
+          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="presentation" focusable="false" style={{ display: 'block', fill: 'none', height: '16px', width: '16px', stroke: 'currentcolor', strokeWidth: '3', overflow: 'visible' }}><path d="M10 3.333L22 8v16L10 19.333z" fill="none"></path><path d="M22 8l8-4.667v16L22 24m-12-4.667l-8 4.667v-16L10 3.333"></path></svg>
+        </button>
       </div>
     </div>
   );

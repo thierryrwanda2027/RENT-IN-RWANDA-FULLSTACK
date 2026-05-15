@@ -111,14 +111,23 @@ async function main() {
 
   const guest = await prisma.user.create({
     data: {
-      name: 'Thierry User',
-      email: 'user@example.com',
+      name: 'Thierry Guest',
+      email: 'guest@example.com',
       password: hashedPassword,
       role: 'GUEST',
     },
   });
 
-  console.log('Users created:', { admin: admin.email, guest: guest.email });
+  const host = await prisma.user.create({
+    data: {
+      name: 'Thierry Host',
+      email: 'host@example.com',
+      password: hashedPassword,
+      role: 'HOST',
+    },
+  });
+
+  console.log('Users created:', { admin: admin.email, host: host.email, guest: guest.email });
 
   // Create Listings
   const listingsToCreate = Array.from({ length: 50 }, (_, i) => {
@@ -126,12 +135,12 @@ async function main() {
     const base = baseListings[baseIndex];
     
     return {
-      title: titles[baseIndex],
+      title: titles[baseIndex] + (i > 5 ? ` #${i}` : ''),
       location: base.location,
       price: 95000 + (i % 5) * 25000 + (baseIndex * 10000),
       rating: base.rating,
       superhost: base.superhost,
-      available: i !== 2, // Make one unavailable
+      available: true,
       availableFrom: base.availableFrom,
       img: propertyImages[i % propertyImages.length], 
       category: base.category,
@@ -141,15 +150,19 @@ async function main() {
 
   const entries = Array.from(listingsToCreate.entries());
   for (const [index, l] of entries) {
+    let userId = null;
+    if (index < 5) userId = admin.id;
+    else if (index < 15) userId = host.id;
+
     await prisma.listing.create({ 
       data: {
         ...l,
-        userId: index < 5 ? admin.id : null // First 5 listings owned by admin
+        userId
       } 
     });
   }
 
-  console.log('50 listings seeded successfully.');
+  console.log('50 listings seeded successfully (15 owned by hosts).');
 
   // Create a sample booking
   const firstListing = await prisma.listing.findFirst();

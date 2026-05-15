@@ -1,0 +1,16 @@
+{
+  "name": "Rent in Rwanda - Thierry BNB",
+  "short_name": "Rent Rwanda",
+  "description": "Premium property rentals and stays in Rwanda.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#00A1DE",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

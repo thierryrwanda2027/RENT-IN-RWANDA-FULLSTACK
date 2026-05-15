@@ -1,10 +1,10 @@
 "use client";
 
-export default function ListingLoading() {
+export default function ListingSkeleton() {
   return (
     <div className="container mx-auto px-4 md:px-10 py-8">
       <div className="max-w-screen-xl mx-auto">
-        {/* Title & Action Buttons Skeleton */}
+        {/* Title and Action Buttons Skeleton */}
         <div className="mb-6 space-y-4">
           <div className="h-8 bg-zinc-200 rounded-lg w-1/3 animate-pulse"></div>
           <div className="flex justify-between items-center">
@@ -57,7 +57,7 @@ export default function ListingLoading() {
 
           {/* Sidebar Skeleton */}
           <div className="relative">
-            <div className="sticky top-28 border border-zinc-200 rounded-2xl p-6 shadow-sm space-y-6 bg-white">
+            <div className="sticky top-28 border border-zinc-200 rounded-2xl p-6 shadow-sm space-y-6">
               <div className="flex justify-between items-center">
                 <div className="h-6 bg-zinc-200 rounded w-24 animate-pulse"></div>
                 <div className="h-4 bg-zinc-100 rounded w-16 animate-pulse"></div>
@@ -88,4 +88,3 @@ export default function ListingLoading() {
     </div>
   );
 }
-
